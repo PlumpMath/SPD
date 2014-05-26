@@ -1,6 +1,8 @@
 (ns steampunk.utils
   (:require [cljs.reader :as reader]
-            [om.core :as om :include-macros true])
+            [om.core :as om :include-macros true]
+            [clojure.walk :as walk]
+            [cljs.core.async :refer [put! >! <! chan timeout]])
   (:import [goog.ui IdGenerator]))
 
 (defn guid []
@@ -28,13 +30,17 @@
          #(print "server response:" %)))
 
 
-(defn handle-login [data owner]
+(defn handle-login [app]
   (.then (.login js/Hull "facebook")
-         #(do (om/transact! data :user
-                        (fn[_] (walk/keywordize-keys (js->clj %))))
-            (om/refresh!))))
+        #(om/transact! app :user
+                        (fn[_] (walk/keywordize-keys (js->clj %))) :update)
+         #(print %)))
 
 
-(defn handle-logout [data owner]
+(defn handle-logout [app]
   (.then (.logout js/Hull)
-         #(om/transact! data :user (fn[_] nil))))
+         #(om/transact! app :user (fn[_] nil))))
+
+(def repo "https://steampunkdating.primsic.io/api")
+(def p-api (let [x (chan)] (.Api js/Prismic repo (fn [err, api] (put! x api))) (<! x)) )
+p-api

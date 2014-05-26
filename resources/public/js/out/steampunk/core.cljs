@@ -6,7 +6,8 @@
             [om.dom :as dom :include-macros true]
             [cljs-http.client :as http]
             [clojure.walk :as walk]
-            [steampunk.utils :refer [guid handle-change end-edit update-extra handle-login handel-logout]]))
+            [secretary.core :as secretary :include-macros true :refer [defroute]]
+            [steampunk.utils :refer [guid handle-change end-edit update-extra handle-login handle-logout]]))
 
 ;; Lets you do (prn "stuff") to the console
 (enable-console-print!)
@@ -229,7 +230,7 @@
               (dom/span #js {:className "icon-bar"})
               (dom/span #js {:className "icon-bar"})))
 
-(defn login-button [data owner update]
+(defn login-button [app owner]
   (reify
     om/IDisplayName
     (display-name [_] "Login-Button")
@@ -237,19 +238,19 @@
     (render [_]
             (dom/ul #js {:className "nav navbar-nav navbar-right"}
                     (dom/li nil (dom/a #js {:href "#"
-                                            :onClick #(handle-login data owner update)} "Login"))))))
+                                            :onClick #(handle-login app)} "Login"))))))
 
-(defn logout-button [data owner update]
+(defn logout-button [app owner]
   (reify
     om/IDisplayName
     (display-name [_] "Logout-Button")
     om/IRender
     (render [_]
             (dom/ul #js {:className "nav navbar-nav navbar-righ"}
-                    (dom/li nil (dom/a #js {:href "#"} (str "Hi, " (get-in data [:user :name]))))
-                    (dom/li nil (dom/a #js {:href "#" :onClick #(handle-logout data owner upate)} "Logout"))))))
+                    (dom/li nil (dom/a #js {:href "#"} (str "Hi, " (get-in app [:user :name]))))
+                    (dom/li nil (dom/a #js {:href "#" :onClick #(handle-logout app)} "Logout"))))))
 
-(defn navbar  [data owner]
+(defn navbar  [app owner]
   (reify
     om/IDisplayName
     (display-name [_] "Navbar")
@@ -269,9 +270,9 @@
                                         (dom/a #js {:href "#"} "Profile"))
                                        (dom/li nil (dom/a #js {:href "#"} "Inbox"))
                                        (dom/li nil (dom/a #js {:href "#"} "Settings")))
-                               (if (nil? (get-in data [:user :name]))
-                                 (om/build login-button data)
-                                 (om/build logout-button data))))))))
+                               (if (nil? (get-in app [:user :name]))
+                                 (om/build login-button app)
+                                 (om/build logout-button app))))))))
 
 
 (defn center-pane [user owner]
@@ -286,12 +287,13 @@
 (def app-state
   (atom {:user nil}))
 
-(defn steampunk-app [app owner]
+
+(defn user-page [app owner]
   (reify
     om/IRender
     (render [_]
             (dom/div nil
-                     (om/build navbar (:user app))
+                     (om/build navbar app)
                      (om/build center-pane (:user app ))))))
 
-(om/root steampunk-app app-state {:target (.getElementById js/document "content")})
+(om/root user-page app-state {:target (.getElementById js/document "content")})

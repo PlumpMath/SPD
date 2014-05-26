@@ -6,6 +6,7 @@
             [om.dom :as dom :include-macros true]
             [cljs-http.client :as http]
             [clojure.walk :as walk]
+            [secretary.core :as secretary :include-macros true :refer [defroute]]
             [steampunk.utils :refer [guid handle-change end-edit update-extra handle-login handle-logout]]))
 
 ;; Lets you do (prn "stuff") to the console
@@ -286,9 +287,8 @@
 (def app-state
   (atom {:user nil}))
 
-app-state
 
-(defn steampunk-app [app owner]
+(defn user-page [app owner]
   (reify
     om/IRender
     (render [_]
@@ -296,4 +296,4 @@ app-state
                      (om/build navbar app)
                      (om/build center-pane (:user app ))))))
 
-(om/root steampunk-app app-state {:target (.getElementById js/document "content")})
+(om/root user-page app-state {:target (.getElementById js/document "content")})
