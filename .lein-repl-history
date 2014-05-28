@@ -12,3 +12,57 @@ exi
 (serve steampunk.core/app)
 (require 'ring.util.serve)
 exit
+(def service
+(pallet.compute/instantiate-provider
+"google-compute"
+:identity 886624668649.apps.googleusercontent.com
+(def service
+(pallet.compute/instantiate-provider
+"google-compute"
+:identity "886624668649.apps.googleusercontent.com"
+exit
+(require 'pallet.compute)
+(def service (pallet.compute/instantiate-provider "google-compute")
+)
+(exit)
+(require 'pallet.compute)
+(def service (pallet.compute/instantiate-provider "google-compute"))
+(exit)
+(require 'pallet.compute)
+(def service (pallet.compute/instantiate-provider "google-compute"))
+(exit)
+(require 'pallet.compute)
+(def service (pallet.compute/instantiate-provider "google-compute"))
+(exit)
+(require 'pallet.api 'pallet.compute 'pallet.configure)
+(def gce (pallet.configure/compute-service "google-compute"))
+(exit)
+(require 'pallet.api 'pallet.compute 'pallet.configure)
+(def gce (pallet.configure/compute-service "google-compute"))
+(exit)
+(require 'pallet.api 'pallet.compute 'pallet.configure)
+(def gce (pallet.configure/compute-service "google-compute"))
+(def my-group
+(pallet.api/group-spec "mygroup"
+:node-spec (pallet.api/node-spec
+:image {:os-family :ubuntu})))
+(def s (pallet.api/converge {my-group 1} :compute gce))
+(def gce (pallet.configure/compute-service "google-compute"))
+(def s (pallet.api/converge {my-group 1} :compute gce))
+(exit)
+(require 'pallet.api 'pallet.compute 'pallet.configure)
+(def gce (pallet.configure/compute-service "google-compute"))
+(def gce (pallet.configure/compute-service "google-compute-engine"))
+(def gce (pallet.configure/compute-service "google-compute"))
+(def my-group
+:node-spec (pallet.api/node-spec
+:image {:os-family :ubuntu})))
+(def my-group
+(pallet.api/group-spec "mygroup"
+:node-spec (pallet.api/node-spec
+:image {:os-family :ubuntu})))
+(def s (pallet.api/converge {my-group 1} :compute gce))
+(exit)
+(pallet.compute/supported-providers)
+(sort (pallet.compute/supported-providers))
+(exit)
