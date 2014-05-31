@@ -18,4 +18,5 @@ goog.addDependency("../cljs_http/util.js", ['cljs_http.util'], ['goog.userAgent'
 goog.addDependency("../cljs_http/core.js", ['cljs_http.core'], ['cljs.core', 'goog.net.EventType', 'cljs_http.util', 'goog.net.XhrIo', 'cljs.core.async']);
 goog.addDependency("../secretary/core.js", ['secretary.core'], ['cljs.core', 'clojure.walk', 'clojure.string']);
 goog.addDependency("../cljs_http/client.js", ['cljs_http.client'], ['cljs.core', 'no.en.core', 'cljs_http.core', 'cljs_http.util', 'clojure.string', 'cljs.reader', 'cljs.core.async', 'goog.Uri']);
-goog.addDependency("../steampunk/core.js", ['steampunk.core'], ['cljs.core', 'cljs_http.client', 'secretary.core', 'steampunk.utils', 'om.core', 'clojure.walk', 'om.dom', 'cljs.core.async', 'goog.events']);
+goog.addDependency("../steampunk/core.js", ['steampunk.core'], ['cljs.core', 'goog.History.EventType', 'cljs_http.client', 'secretary.core', 'steampunk.utils', 'om.core', 'goog.History', 'clojure.walk', 'om.dom', 'cljs.core.async', 'goog.events']);
+goog.addDependency("../steampunk/prismic.js", ['steampunk.prismic'], ['cljs.core']);

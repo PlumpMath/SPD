@@ -41,4 +41,15 @@ goog.addDependency("uri/utils.js", ['goog.uri.utils', 'goog.uri.utils.ComponentI
 goog.addDependency("net/xhrio.js", ['goog.net.XhrIo', 'goog.net.XhrIo.ResponseType'], ['goog.Timer', 'goog.array', 'goog.debug.Logger', 'goog.debug.entryPointRegistry', 'goog.events', 'goog.events.EventTarget', 'goog.json', 'goog.net.ErrorCode', 'goog.net.EventType', 'goog.net.HttpStatus', 'goog.net.XmlHttp', 'goog.object', 'goog.structs', 'goog.structs.Map', 'goog.uri.utils']);
 goog.addDependency("crypt/crypt.js", ['goog.crypt'], ['goog.array']);
 goog.addDependency("uri/uri.js", ['goog.Uri', 'goog.Uri.QueryData'], ['goog.array', 'goog.string', 'goog.structs', 'goog.structs.Map', 'goog.uri.utils', 'goog.uri.utils.ComponentIndex']);
+goog.addDependency("dom/browserfeature.js", ['goog.dom.BrowserFeature'], ['goog.userAgent']);
+goog.addDependency("dom/tagname.js", ['goog.dom.TagName'], []);
+goog.addDependency("dom/classes.js", ['goog.dom.classes'], ['goog.array']);
+goog.addDependency("math/math.js", ['goog.math'], ['goog.array', 'goog.asserts']);
+goog.addDependency("math/coordinate.js", ['goog.math.Coordinate'], ['goog.math']);
+goog.addDependency("math/size.js", ['goog.math.Size'], []);
+goog.addDependency("dom/dom.js", ['goog.dom', 'goog.dom.DomHelper', 'goog.dom.NodeType'], ['goog.array', 'goog.dom.BrowserFeature', 'goog.dom.TagName', 'goog.dom.classes', 'goog.math.Coordinate', 'goog.math.Size', 'goog.object', 'goog.string', 'goog.userAgent']);
+goog.addDependency("events/eventhandler.js", ['goog.events.EventHandler'], ['goog.Disposable', 'goog.array', 'goog.events', 'goog.events.EventWrapper']);
+goog.addDependency("history/eventtype.js", ['goog.history.EventType'], []);
+goog.addDependency("history/event.js", ['goog.history.Event'], ['goog.events.Event', 'goog.history.EventType']);
+goog.addDependency("history/history.js", ['goog.History', 'goog.History.Event', 'goog.History.EventType'], ['goog.Timer', 'goog.dom', 'goog.events', 'goog.events.BrowserEvent', 'goog.events.Event', 'goog.events.EventHandler', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.history.Event', 'goog.history.EventType', 'goog.string', 'goog.userAgent']);
 goog.addDependency("crypt/base64.js", ['goog.crypt.base64'], ['goog.crypt', 'goog.userAgent']);

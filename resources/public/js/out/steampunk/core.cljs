@@ -7,7 +7,11 @@
             [cljs-http.client :as http]
             [clojure.walk :as walk]
             [secretary.core :as secretary :include-macros true :refer [defroute]]
-            [steampunk.utils :refer [guid handle-change end-edit update-extra handle-login handle-logout]]))
+            [steampunk.utils :refer [guid handle-change end-edit update-extra handle-login handle-logout]])
+  (:import goog.History
+           goog.History.EventType))
+
+(def history (History.) )
 
 ;; Lets you do (prn "stuff") to the console
 (enable-console-print!)
@@ -269,6 +273,7 @@
                                         #js {:className "active"}
                                         (dom/a #js {:href "#"} "Profile"))
                                        (dom/li nil (dom/a #js {:href "#"} "Inbox"))
+                                       (dom/li nil (dom/a #js {:href "#"} "Blog"))
                                        (dom/li nil (dom/a #js {:href "#"} "Settings")))
                                (if (nil? (get-in app [:user :name]))
                                  (om/build login-button app)
@@ -288,6 +293,13 @@
   (atom {:user nil}))
 
 
+(defn blog-page [app owner]
+  (reify
+    om/IRender
+    (render [_]
+            (dom/div nil
+                      (om/build navbar app)))))
+
 (defn user-page [app owner]
   (reify
     om/IRender
@@ -296,4 +308,19 @@
                      (om/build navbar app)
                      (om/build center-pane (:user app ))))))
 
-(om/root user-page app-state {:target (.getElementById js/document "content")})
+(defroute "/blog" {}
+  (om/root blog-page app-state {:target (.getElementById js/document "content")}))
+
+(defroute "/profile" {}
+  (om/root user-page app-state {:target (.getElementById js/document "content")}))
+
+(defroute "/" {}
+  (om/root user-page app-state {:target (.getElementById js/document "content")}))
+
+
+(def navigation-state
+  (atom [{:name "UserProfile" :path "/profile"}
+         {:name "Blog"      :path "/blog"}]))
+
+
+(deffn )
