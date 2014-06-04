@@ -1,8 +1,9 @@
 (ns steampunk.utils
+  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.reader :as reader]
             [om.core :as om :include-macros true]
             [clojure.walk :as walk]
-            [cljs.core.async :refer [put! >! <! chan timeout]])
+            [cljs.core.async :refer [>! <! put! chan timeout] ])
   (:import [goog.ui IdGenerator]))
 
 (defn guid []
@@ -41,6 +42,5 @@
   (.then (.logout js/Hull)
          #(om/transact! app :user (fn[_] nil))))
 
-(def repo "https://steampunkdating.primsic.io/api")
-(def p-api (let [x (chan)] (.Api js/Prismic repo (fn [err, api] (put! x api))) (<! x)) )
-p-api
+
+

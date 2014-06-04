@@ -1,13 +1,18 @@
 (ns steampunk.core
-  (:require-macros [cljs.core.async.macros :refer [go alt!]])
-  (:require [goog.events :as events]
+ (:require [goog.events :as events]
             [cljs.core.async :refer [put! <! >! chan timeout]]
             [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [cljs-http.client :as http]
             [clojure.walk :as walk]
             [secretary.core :as secretary :include-macros true :refer [defroute]]
+            [devcards.core :as dc ]
+            [figwheel.client :as fw ]
             [steampunk.utils :refer [guid handle-change end-edit update-extra handle-login handle-logout]])
+
+   (:require-macros [cljs.core.async.macros :refer [go alt!]]
+                   [devcards.core :refer [defcard]])
+
   (:import goog.History
            goog.History.EventType))
 
@@ -75,13 +80,42 @@
           (dom/dt nil t)
           (dom/dd nil d)))
 
+(defn edit-detail [t d]
+  (dom/dl #js {:className "d1-horizontal"}
+          (dom/dt nil t)
+          (dom/text nil d)))
+
+(defn editable-details [user owner]
+  (reify
+    om/IRender
+    (render [this]
+     (panel "Facts-edit2" (dom/div
+                     #js {:className "panel-body"}
+                             (edit-detail "Name" (:name user))
+                             (edit-detail "Orientation" (orientation user))
+                             (edit-detail "Smoker" (smokes user))
+                             (edit-detail "Drinker" (drinks user))
+                             (edit-detail "Drugs" (drugs user))
+                             (edit-detail "Religion" (religion user)))))))
+(def user {:extra {
+                   :orientation "gay"
+                   :smoke  "Only Green"
+                   :drink  "lots"
+                   :drug   "Bring it on"
+                   :religion "sane"}})
+(defcard editable-detail
+  (dc/om-root-card editable-details user ))
+
 (defn interests [user]
   (dom/div nil
            (let [inters (get-in user [:extra :interests])]
              (clj->js (map #(dom/span #js {:className "badge"} %) inters )))))
 
 
-(defn panel [title content]
+(defn panel
+  ([title content]
+   (panel title content #()))
+  ([title content edit-fn]
   (dom/div
    #js {:className "panel panel-default"}
    (dom/div
@@ -93,8 +127,9 @@
       (dom/button
        #js {:type "button" :className "btn btn-default btn-xs panel-title"}
        (dom/span
-        #js {:className "glyphicon glyphicon-edit glyphicon-align-justify"})))))
-   (dom/div #js {:className "panel-body"} content )))
+        #js {:className "glyphicon glyphicon-edit glyphicon-align-justify"
+             :onClick (edit-fn)})))))
+   (dom/div #js {:className "panel-body"} content ))))
 
 
 
@@ -142,19 +177,6 @@
                    :className "img-rounded img-responsive"} nil)))))
 
 
-(comment
-(defn about-block [user owner]
-  (reify
-    om/IInitState
-    (init-state []
-      {:editable false})
-    om/IRenderState
-    (render [_ {:keys [edit-text editing]}]
-            (panel
-             (str "About " (get-in user [:extra :name]))
-             (dom/div
-              #js {:className "panel-body"}
-              (get-in user [:extra :about])))))))
 
 
 (defn display [show]
@@ -206,6 +228,9 @@
                          (when (om/get-state owner :editing)
                            (end-edit user data-key text owner
                                      (fn [new-text] (update-extra {:about new-text})))))})))))))
+
+(defcard about-block
+  (dc/om-root-card about-block {:extra {:about "test"}}))
 
 (defn user-column [user owner]
   (reify
@@ -317,10 +342,13 @@
 (defroute "/" {}
   (om/root user-page app-state {:target (.getElementById js/document "content")}))
 
+(dc/start-devcard-ui!)
+(dc/start-figwheel-reloader!)
 
 (def navigation-state
   (atom [{:name "UserProfile" :path "/profile"}
          {:name "Blog"      :path "/blog"}]))
 
 
-(deffn )
+(defcard blog-page
+  (dc/om-root-card blog-page {:user nil}))
